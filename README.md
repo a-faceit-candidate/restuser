@@ -5,7 +5,7 @@ It also provides a client to be used by multiple clients, as well as by the impl
 
 # Documentation
 
-You can find the swagger documentation in the [`docs/`](./docs) folder, or rendered on [http://a-faceit-candidate.github.com/restuser](http://a-faceit-candidate.github.com/restuser).
+You can find the swagger documentation in the [`docs/`](./docs) folder, or rendered on [http://a-faceit-candidate.github.io/restuser](http://a-faceit-candidate.github.io/restuser).
 
 # Contibution
 
