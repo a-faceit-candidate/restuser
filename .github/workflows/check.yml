@@ -26,6 +26,24 @@ jobs:
         uses: golangci/golangci-lint-action@v2
         with:
           version: v1.29
+  tidy:
+    name: go.mod is tidied
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '~1.15'
+      - run: go mod tidy 
+      - name: Check if there are changes
+        id: changes
+        uses: UnicornGlobal/has-changes-action@v1.0.11
+      - name: Show diff if there were changes
+        if: steps.changes.outputs.changed == 1
+        run: git diff
+      - name: Fail if there were changes
+        if: steps.changes.outputs.changed == 1
+        run: exit 1
   docs:
     name: docs are up to date
     runs-on: ubuntu-latest
@@ -34,7 +52,7 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '~1.15'
-      - 
+      - name: Install swag
         run: make install
       - name: Generate the docs
         run: make docs
