@@ -55,7 +55,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://github.com/a-faceit-candidate/userservice
   title: User Service REST API
-  version: 0.1.0
+  version: 1.0.0
 paths:
   /users:
     get:
