@@ -18,4 +18,3 @@ tidy:
 
 install: ## Install dependencies
 	@GO111MODULE=off go get -u github.com/swaggo/swag/cmd/swag
-	@GO111MODULE=off go get -u github.com/golangci/golangci-lint/cmd/golangci-lint@v1.30.0
