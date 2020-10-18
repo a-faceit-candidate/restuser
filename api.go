@@ -10,7 +10,7 @@ import (
 )
 
 // @title User Service REST API
-// @version 1.0
+// @version 0.1.0
 // @description A simple user service for the FACEIT code challange.
 // @termsOfService http://github.com/a-faceit-candidate/userservice
 
