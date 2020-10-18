@@ -1,4 +1,4 @@
-module github.com/a-faceit-candidate/userservice/restuser
+module github.com/a-faceit-candidate/restuser
 
 go 1.14
 

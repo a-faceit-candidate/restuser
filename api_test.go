@@ -1,4 +1,4 @@
-package restuser
+package restuser_test
 
 import (
 	"context"
@@ -12,18 +12,19 @@ import (
 	"testing"
 	"time"
 
+	"github.com/a-faceit-candidate/restuser"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestAPI_CreateUser(t *testing.T) {
-	someUserToCreate := &User{
+	someUserToCreate := &restuser.User{
 		Name:    "Pepe",
 		Email:   "pepe@faceit.com",
 		Country: "fr",
 	}
 
-	someCreatedUser := &User{
+	someCreatedUser := &restuser.User{
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-02T15:04:05Z",
@@ -32,12 +33,12 @@ func TestAPI_CreateUser(t *testing.T) {
 		Country:   "fr",
 	}
 
-	someErrorResponse := &ErrorResponse{Message: "everything is wrong"}
+	someErrorResponse := &restuser.ErrorResponse{Message: "everything is wrong"}
 
 	for _, tc := range []struct {
 		name                string
 		srv                 testServerExpectations
-		expectedReturnValue *User
+		expectedReturnValue *restuser.User
 		expectedError       error
 	}{
 		{
@@ -62,7 +63,7 @@ func TestAPI_CreateUser(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusBadRequest, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusBadRequest, Response: someErrorResponse},
 		},
 		{
 			name: "internal error",
@@ -74,7 +75,7 @@ func TestAPI_CreateUser(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
 		},
 		{
 			name: "unexpected error",
@@ -93,7 +94,7 @@ func TestAPI_CreateUser(t *testing.T) {
 			srv := startTestServer(t, tc.srv)
 			defer srv.Close()
 
-			api := New(Config{URL: srv.URL})
+			api := restuser.New(restuser.Config{URL: srv.URL})
 			res, err := api.CreateUser(context.Background(), someUserToCreate)
 			assert.Equal(t, tc.expectedReturnValue, res)
 			assert.Equal(t, tc.expectedError, err)
@@ -101,14 +102,14 @@ func TestAPI_CreateUser(t *testing.T) {
 	}
 
 	t.Run("nil user", func(t *testing.T) {
-		api := New(Config{"http://google.com"})
+		api := restuser.New(restuser.Config{"http://google.com"})
 		_, err := api.CreateUser(context.Background(), nil)
 		assert.Error(t, err)
 	})
 }
 
 func TestAPI_UpdateUser(t *testing.T) {
-	someUserToUpdate := &User{
+	someUserToUpdate := &restuser.User{
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
@@ -117,7 +118,7 @@ func TestAPI_UpdateUser(t *testing.T) {
 		Country:   "fr",
 	}
 
-	someUpdatedUser := &User{
+	someUpdatedUser := &restuser.User{
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
@@ -126,12 +127,12 @@ func TestAPI_UpdateUser(t *testing.T) {
 		Country:   "fr",
 	}
 
-	someErrorResponse := &ErrorResponse{Message: "everything is wrong"}
+	someErrorResponse := &restuser.ErrorResponse{Message: "everything is wrong"}
 
 	for _, tc := range []struct {
 		name                string
 		srv                 testServerExpectations
-		expectedReturnValue *User
+		expectedReturnValue *restuser.User
 		expectedError       error
 	}{
 		{
@@ -156,7 +157,7 @@ func TestAPI_UpdateUser(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusBadRequest, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusBadRequest, Response: someErrorResponse},
 		},
 		{
 			name: "conflict",
@@ -168,7 +169,7 @@ func TestAPI_UpdateUser(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusConflict, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusConflict, Response: someErrorResponse},
 		},
 		{
 			name: "not found",
@@ -180,7 +181,7 @@ func TestAPI_UpdateUser(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusNotFound, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusNotFound, Response: someErrorResponse},
 		},
 		{
 			name: "internal error",
@@ -192,7 +193,7 @@ func TestAPI_UpdateUser(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
 		},
 		{
 			name: "unexpected error",
@@ -211,7 +212,7 @@ func TestAPI_UpdateUser(t *testing.T) {
 			srv := startTestServer(t, tc.srv)
 			defer srv.Close()
 
-			api := New(Config{URL: srv.URL})
+			api := restuser.New(restuser.Config{URL: srv.URL})
 			res, err := api.UpdateUser(context.Background(), someUserToUpdate)
 			assert.Equal(t, tc.expectedReturnValue, res)
 			assert.Equal(t, tc.expectedError, err)
@@ -219,14 +220,14 @@ func TestAPI_UpdateUser(t *testing.T) {
 	}
 
 	t.Run("nil user", func(t *testing.T) {
-		api := New(Config{"http://google.com"})
+		api := restuser.New(restuser.Config{"http://google.com"})
 		_, err := api.UpdateUser(context.Background(), nil)
 		assert.Error(t, err)
 	})
 }
 
 func TestAPI_GetUser(t *testing.T) {
-	someUser := &User{
+	someUser := &restuser.User{
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
@@ -235,12 +236,12 @@ func TestAPI_GetUser(t *testing.T) {
 		Country:   "fr",
 	}
 
-	someErrorResponse := &ErrorResponse{Message: "everything is wrong"}
+	someErrorResponse := &restuser.ErrorResponse{Message: "everything is wrong"}
 
 	for _, tc := range []struct {
 		name                string
 		srv                 testServerExpectations
-		expectedReturnValue *User
+		expectedReturnValue *restuser.User
 		expectedError       error
 	}{
 		{
@@ -263,7 +264,7 @@ func TestAPI_GetUser(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusNotFound, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusNotFound, Response: someErrorResponse},
 		},
 		{
 			name: "internal error",
@@ -274,7 +275,7 @@ func TestAPI_GetUser(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
 		},
 		{
 			name: "unexpected error",
@@ -292,7 +293,7 @@ func TestAPI_GetUser(t *testing.T) {
 			srv := startTestServer(t, tc.srv)
 			defer srv.Close()
 
-			api := New(Config{URL: srv.URL})
+			api := restuser.New(restuser.Config{URL: srv.URL})
 			res, err := api.GetUser(context.Background(), someUser.ID)
 			assert.Equal(t, tc.expectedReturnValue, res)
 			assert.Equal(t, tc.expectedError, err)
@@ -302,7 +303,7 @@ func TestAPI_GetUser(t *testing.T) {
 
 func TestAPI_DeleteUser(t *testing.T) {
 	const someUserID = "c3e11b46-109c-11eb-adc1-0242ac120002"
-	someErrorResponse := &ErrorResponse{Message: "everything is wrong"}
+	someErrorResponse := &restuser.ErrorResponse{Message: "everything is wrong"}
 
 	for _, tc := range []struct {
 		name          string
@@ -326,7 +327,7 @@ func TestAPI_DeleteUser(t *testing.T) {
 				responseStatus:  http.StatusNotFound,
 				responsePayload: someErrorResponse,
 			},
-			expectedError: Error{StatusCode: http.StatusNotFound, Response: someErrorResponse},
+			expectedError: restuser.Error{StatusCode: http.StatusNotFound, Response: someErrorResponse},
 		},
 		{
 			name: "internal error",
@@ -336,7 +337,7 @@ func TestAPI_DeleteUser(t *testing.T) {
 				responseStatus:  http.StatusInternalServerError,
 				responsePayload: someErrorResponse,
 			},
-			expectedError: Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
+			expectedError: restuser.Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
 		},
 		{
 			name: "unexpected error",
@@ -353,7 +354,7 @@ func TestAPI_DeleteUser(t *testing.T) {
 			srv := startTestServer(t, tc.srv)
 			defer srv.Close()
 
-			api := New(Config{URL: srv.URL})
+			api := restuser.New(restuser.Config{URL: srv.URL})
 			err := api.DeleteUser(context.Background(), someUserID)
 			assert.Equal(t, tc.expectedError, err)
 		})
@@ -361,7 +362,7 @@ func TestAPI_DeleteUser(t *testing.T) {
 }
 
 func TestAPI_ListUsers(t *testing.T) {
-	frenchUser := User{
+	frenchUser := restuser.User{
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
@@ -369,7 +370,7 @@ func TestAPI_ListUsers(t *testing.T) {
 		Email:     "pierre@faceit.com",
 		Country:   "fr",
 	}
-	spanishUser := User{
+	spanishUser := restuser.User{
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120003",
 		CreatedAt: "2007-01-02T16:04:05Z",
 		UpdatedAt: "2007-01-03T16:04:05Z",
@@ -378,13 +379,13 @@ func TestAPI_ListUsers(t *testing.T) {
 		Country:   "es",
 	}
 
-	someErrorResponse := &ErrorResponse{Message: "everything is wrong"}
+	someErrorResponse := &restuser.ErrorResponse{Message: "everything is wrong"}
 
 	for _, tc := range []struct {
 		name                string
 		srv                 testServerExpectations
-		params              ListUsersParams
-		expectedReturnValue []User
+		params              restuser.ListUsersParams
+		expectedReturnValue []restuser.User
 		expectedError       error
 	}{
 		{
@@ -393,9 +394,9 @@ func TestAPI_ListUsers(t *testing.T) {
 				method:          http.MethodGet,
 				url:             "/v1/users",
 				responseStatus:  http.StatusOK,
-				responsePayload: []User{frenchUser, spanishUser},
+				responsePayload: []restuser.User{frenchUser, spanishUser},
 			},
-			expectedReturnValue: []User{frenchUser, spanishUser},
+			expectedReturnValue: []restuser.User{frenchUser, spanishUser},
 			expectedError:       nil,
 		},
 		{
@@ -404,10 +405,10 @@ func TestAPI_ListUsers(t *testing.T) {
 				method:          http.MethodGet,
 				url:             "/v1/users?country=es",
 				responseStatus:  http.StatusOK,
-				responsePayload: []User{spanishUser},
+				responsePayload: []restuser.User{spanishUser},
 			},
-			params:              ListUsersParams{Country: "es"},
-			expectedReturnValue: []User{spanishUser},
+			params:              restuser.ListUsersParams{Country: "es"},
+			expectedReturnValue: []restuser.User{spanishUser},
 			expectedError:       nil,
 		},
 		{
@@ -419,7 +420,7 @@ func TestAPI_ListUsers(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusBadRequest, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusBadRequest, Response: someErrorResponse},
 		},
 		{
 			name: "internal error",
@@ -430,7 +431,7 @@ func TestAPI_ListUsers(t *testing.T) {
 				responsePayload: someErrorResponse,
 			},
 			expectedReturnValue: nil,
-			expectedError:       Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
+			expectedError:       restuser.Error{StatusCode: http.StatusInternalServerError, Response: someErrorResponse},
 		},
 		{
 			name: "unexpected error",
@@ -448,7 +449,7 @@ func TestAPI_ListUsers(t *testing.T) {
 			srv := startTestServer(t, tc.srv)
 			defer srv.Close()
 
-			api := New(Config{URL: srv.URL})
+			api := restuser.New(restuser.Config{URL: srv.URL})
 			res, err := api.ListUsers(context.Background(), tc.params)
 			assert.Equal(t, tc.expectedReturnValue, res)
 			assert.Equal(t, tc.expectedError, err)
@@ -457,7 +458,7 @@ func TestAPI_ListUsers(t *testing.T) {
 }
 
 func TestWithBasePath(t *testing.T) {
-	someUser := &User{
+	someUser := &restuser.User{
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
@@ -468,36 +469,36 @@ func TestWithBasePath(t *testing.T) {
 
 	for _, tc := range []struct {
 		name string
-		do   func(*API)
+		do   func(*restuser.API)
 	}{
 		{
 			name: "CreateUser",
-			do: func(api *API) {
+			do: func(api *restuser.API) {
 				_, _ = api.CreateUser(context.Background(), someUser)
 			},
 		},
 		{
 			name: "UpdateUser",
-			do: func(api *API) {
+			do: func(api *restuser.API) {
 				_, _ = api.UpdateUser(context.Background(), someUser)
 			},
 		},
 		{
 			name: "DeleteUser",
-			do: func(api *API) {
+			do: func(api *restuser.API) {
 				_ = api.DeleteUser(context.Background(), someUser.ID)
 			},
 		},
 		{
 			name: "GetUser",
-			do: func(api *API) {
+			do: func(api *restuser.API) {
 				_, _ = api.GetUser(context.Background(), someUser.ID)
 			},
 		},
 		{
 			name: "ListUsers",
-			do: func(api *API) {
-				_, _ = api.ListUsers(context.Background(), ListUsersParams{})
+			do: func(api *restuser.API) {
+				_, _ = api.ListUsers(context.Background(), restuser.ListUsersParams{})
 			},
 		},
 	} {
@@ -511,7 +512,7 @@ func TestWithBasePath(t *testing.T) {
 			}))
 			defer srv.Close()
 
-			api := New(Config{URL: srv.URL}, WithBasePath(someDifferentBasePath))
+			api := restuser.New(restuser.Config{URL: srv.URL}, restuser.WithBasePath(someDifferentBasePath))
 			tc.do(api)
 
 			// assert that was called, thead safely
@@ -521,7 +522,7 @@ func TestWithBasePath(t *testing.T) {
 }
 
 func TestWithHTTPClient(t *testing.T) {
-	someUser := &User{
+	someUser := &restuser.User{
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
@@ -532,36 +533,36 @@ func TestWithHTTPClient(t *testing.T) {
 
 	for _, tc := range []struct {
 		name string
-		do   func(*API)
+		do   func(*restuser.API)
 	}{
 		{
 			name: "CreateUser",
-			do: func(api *API) {
+			do: func(api *restuser.API) {
 				_, _ = api.CreateUser(context.Background(), someUser)
 			},
 		},
 		{
 			name: "UpdateUser",
-			do: func(api *API) {
+			do: func(api *restuser.API) {
 				_, _ = api.UpdateUser(context.Background(), someUser)
 			},
 		},
 		{
 			name: "DeleteUser",
-			do: func(api *API) {
+			do: func(api *restuser.API) {
 				_ = api.DeleteUser(context.Background(), someUser.ID)
 			},
 		},
 		{
 			name: "GetUser",
-			do: func(api *API) {
+			do: func(api *restuser.API) {
 				_, _ = api.GetUser(context.Background(), someUser.ID)
 			},
 		},
 		{
 			name: "ListUsers",
-			do: func(api *API) {
-				_, _ = api.ListUsers(context.Background(), ListUsersParams{})
+			do: func(api *restuser.API) {
+				_, _ = api.ListUsers(context.Background(), restuser.ListUsersParams{})
 			},
 		},
 	} {
@@ -580,7 +581,7 @@ func TestWithHTTPClient(t *testing.T) {
 				return http.DefaultTransport.RoundTrip(req)
 			})}
 
-			api := New(Config{URL: srv.URL}, WithHTTPClient(client))
+			api := restuser.New(restuser.Config{URL: srv.URL}, restuser.WithHTTPClient(client))
 			tc.do(api)
 
 			// assert that was called, thead safely
@@ -590,7 +591,7 @@ func TestWithHTTPClient(t *testing.T) {
 }
 
 func TestAPI_CallsWithContext(t *testing.T) {
-	someUser := &User{
+	someUser := &restuser.User{
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
@@ -601,39 +602,39 @@ func TestAPI_CallsWithContext(t *testing.T) {
 
 	for _, tc := range []struct {
 		name string
-		do   func(context.Context, *API) error
+		do   func(context.Context, *restuser.API) error
 	}{
 		{
 			name: "CreateUser",
-			do: func(ctx context.Context, api *API) error {
+			do: func(ctx context.Context, api *restuser.API) error {
 				_, err := api.CreateUser(ctx, someUser)
 				return err
 			},
 		},
 		{
 			name: "UpdateUser",
-			do: func(ctx context.Context, api *API) error {
+			do: func(ctx context.Context, api *restuser.API) error {
 				_, err := api.UpdateUser(ctx, someUser)
 				return err
 			},
 		},
 		{
 			name: "DeleteUser",
-			do: func(ctx context.Context, api *API) error {
+			do: func(ctx context.Context, api *restuser.API) error {
 				return api.DeleteUser(ctx, someUser.ID)
 			},
 		},
 		{
 			name: "GetUser",
-			do: func(ctx context.Context, api *API) error {
+			do: func(ctx context.Context, api *restuser.API) error {
 				_, err := api.GetUser(ctx, someUser.ID)
 				return err
 			},
 		},
 		{
 			name: "ListUsers",
-			do: func(ctx context.Context, api *API) error {
-				_, err := api.ListUsers(ctx, ListUsersParams{})
+			do: func(ctx context.Context, api *restuser.API) error {
+				_, err := api.ListUsers(ctx, restuser.ListUsersParams{})
 				return err
 			},
 		},
@@ -648,7 +649,7 @@ func TestAPI_CallsWithContext(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), timeout)
 			defer cancel()
 
-			api := New(Config{URL: srv.URL})
+			api := restuser.New(restuser.Config{URL: srv.URL})
 			err := tc.do(ctx, api)
 
 			assert.Error(t, err)
