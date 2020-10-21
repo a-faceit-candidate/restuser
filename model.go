@@ -10,10 +10,24 @@ type User struct {
 	// UpdatedAt is set by the service when the user is updated.
 	// It's formatted as an RFC3339 timestamp. For a recently created user, it equals the CreatedAt field.
 	UpdatedAt string `json:"updated_at" example:"2006-01-02T15:04:05Z" format:"date-time"`
-	// Name is the name of the user.
-	Name string `json:"name" example:"John Doe"`
+	// FirstName is the first name of the user
+	FirstName string `json:"first_name" example:"John "`
+	// LastName is the first name of the user
+	LastName string `json:"last_name" example:"Doe"`
+	// Name is the nickname of the user.
+	Name string `json:"name" example:"john_doe87"`
 	// Email is the email of the user.
 	Email string `json:"email" example:"john@colega.eu" format:"email"`
+	// Password is the password of the user to be created or updated
+	// This field should be filled only on the create/update requests, and it will come empty on any service responses
+	// Password should be at least 8 characters long
+	Password string `json:"password,omitempty" format:"password"`
+	// PasswordHash is the SHA-256 hash of concatenation of `Password` and `PasswordHash`.
+	// PasswordHash is set by the service and shouldn't be sent on Create or Update requests.
+	PasswordHash string `json:"password_hash,omitempty" example:"5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"`
+	// PasswordSalt is the unique random salt for this user.
+	// PasswordSalt is set by the service and shouldn't be sent on Create or Update requests.
+	PasswordSalt string `json:"password_salt,omitempty" example:"5f4dcc3b5aa765d61d8327deb882cf99"`
 	// Country is the country code of the user, in ISO 3166-1 alpha-2 formatted as lowercase two character string.
 	// Country is not validated to exist when a user is created.
 	Country string `json:"country" example:"es"`

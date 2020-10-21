@@ -191,6 +191,7 @@ func (a *API) GetUser(ctx context.Context, id string) (*User, error) {
 // ListUsers lists existing users with optional filters.
 // @Summary List users.
 // @Description List users, can be filtered by country code.
+// @Description This operation does not return the PasswordHash and PasswordSalt fields for security reasons.
 // @ID list-users
 // @Produce json
 // @Param country query string false "filter by country code"

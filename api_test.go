@@ -19,18 +19,25 @@ import (
 
 func TestAPI_CreateUser(t *testing.T) {
 	someUserToCreate := &restuser.User{
-		Name:    "Pepe",
-		Email:   "pepe@faceit.com",
-		Country: "fr",
+		FirstName: "Francisco",
+		LastName:  "Johnson",
+		Name:      "pepe",
+		Email:     "pepe@faceit.com",
+		Password:  "password123",
+		Country:   "fr",
 	}
 
 	someCreatedUser := &restuser.User{
-		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
-		CreatedAt: "2006-01-02T15:04:05Z",
-		UpdatedAt: "2006-01-02T15:04:05Z",
-		Name:      "Pepe",
-		Email:     "pepe@faceit.com",
-		Country:   "fr",
+		ID:           "c3e11b46-109c-11eb-adc1-0242ac120002",
+		CreatedAt:    "2006-01-02T15:04:05Z",
+		UpdatedAt:    "2006-01-02T15:04:05Z",
+		FirstName:    "Francisco",
+		LastName:     "Johnson",
+		Name:         "pepe",
+		Email:        "pepe@faceit.com",
+		PasswordHash: "668249e46b8a41cb8b01f4d082f7964125b4750ab53ffb99ce8f406605614cff",
+		PasswordSalt: "ceb20772e0c9d240c75eb26b0e37abee",
+		Country:      "fr",
 	}
 
 	someErrorResponse := &restuser.ErrorResponse{Message: "everything is wrong"}
@@ -113,18 +120,25 @@ func TestAPI_UpdateUser(t *testing.T) {
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
-		Name:      "Pepe",
+		FirstName: "Francisco",
+		LastName:  "Johnson",
+		Name:      "pepe",
 		Email:     "pepe@faceit.com",
+		Password:  "password456",
 		Country:   "fr",
 	}
 
 	someUpdatedUser := &restuser.User{
-		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
-		CreatedAt: "2006-01-02T15:04:05Z",
-		UpdatedAt: "2006-01-03T15:04:05Z",
-		Name:      "Pepe",
-		Email:     "pepe@faceit.com",
-		Country:   "fr",
+		ID:           "c3e11b46-109c-11eb-adc1-0242ac120002",
+		CreatedAt:    "2006-01-02T15:04:05Z",
+		UpdatedAt:    "2006-01-03T15:04:05Z",
+		FirstName:    "Francisco",
+		LastName:     "Johnson",
+		Name:         "pepe",
+		Email:        "pepe@faceit.com",
+		PasswordHash: "d1c48938ba814904c2da1c7ad8b1b6378249861536a388613bc73549c1ff3802",
+		PasswordSalt: "d125a874318684c7d491a20acbd3b879",
+		Country:      "fr",
 	}
 
 	someErrorResponse := &restuser.ErrorResponse{Message: "everything is wrong"}
@@ -228,12 +242,16 @@ func TestAPI_UpdateUser(t *testing.T) {
 
 func TestAPI_GetUser(t *testing.T) {
 	someUser := &restuser.User{
-		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
-		CreatedAt: "2006-01-02T15:04:05Z",
-		UpdatedAt: "2006-01-03T15:04:05Z",
-		Name:      "Pepe",
-		Email:     "pepe@faceit.com",
-		Country:   "fr",
+		ID:           "c3e11b46-109c-11eb-adc1-0242ac120002",
+		CreatedAt:    "2006-01-02T15:04:05Z",
+		UpdatedAt:    "2006-01-03T15:04:05Z",
+		FirstName:    "Francisco",
+		LastName:     "Johnson",
+		Name:         "pepe",
+		Email:        "pepe@faceit.com",
+		PasswordHash: "668249e46b8a41cb8b01f4d082f7964125b4750ab53ffb99ce8f406605614cff",
+		PasswordSalt: "ceb20772e0c9d240c75eb26b0e37abee",
+		Country:      "fr",
 	}
 
 	someErrorResponse := &restuser.ErrorResponse{Message: "everything is wrong"}
@@ -366,7 +384,9 @@ func TestAPI_ListUsers(t *testing.T) {
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
-		Name:      "Pierre",
+		FirstName: "Pierre",
+		LastName:  "Morris",
+		Name:      "pierre",
 		Email:     "pierre@faceit.com",
 		Country:   "fr",
 	}
@@ -374,7 +394,9 @@ func TestAPI_ListUsers(t *testing.T) {
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120003",
 		CreatedAt: "2007-01-02T16:04:05Z",
 		UpdatedAt: "2007-01-03T16:04:05Z",
-		Name:      "Pepe",
+		FirstName: "Francisco",
+		LastName:  "Johnson",
+		Name:      "pepe",
 		Email:     "pepe@faceit.com",
 		Country:   "es",
 	}
@@ -462,7 +484,9 @@ func TestWithBasePath(t *testing.T) {
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
-		Name:      "Pepe",
+		FirstName: "Francisco",
+		LastName:  "Johnson",
+		Name:      "pepe",
 		Email:     "pepe@faceit.com",
 		Country:   "fr",
 	}
@@ -526,7 +550,10 @@ func TestWithHTTPClient(t *testing.T) {
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
-		Name:      "Pepe",
+		FirstName: "Francisco",
+		LastName:  "Johnson",
+		Name:      "pepe",
+		Password:  "password123",
 		Email:     "pepe@faceit.com",
 		Country:   "fr",
 	}
@@ -595,7 +622,10 @@ func TestAPI_CallsWithContext(t *testing.T) {
 		ID:        "c3e11b46-109c-11eb-adc1-0242ac120002",
 		CreatedAt: "2006-01-02T15:04:05Z",
 		UpdatedAt: "2006-01-03T15:04:05Z",
-		Name:      "Pepe",
+		FirstName: "Francisco",
+		LastName:  "Johnson",
+		Name:      "pepe",
+		Password:  "password123",
 		Email:     "pepe@faceit.com",
 		Country:   "fr",
 	}
