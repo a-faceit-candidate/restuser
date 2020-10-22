@@ -279,17 +279,17 @@ var doc = `{
                     "example": "john_doe87"
                 },
                 "password": {
-                    "description": "Password is the password of the user to be created or updated\nThis field should be filled only on the create/update requests, and it will come empty on any service responses\nPassword should be at least 8 characters long",
+                    "description": "Password is the password of the user to be created or updated\nThis field should be filled only on the create/update requests, and it will come empty on any service responses\nPassword should be at least 8 characters long\nIf the Password provided is empty, it will not be updated.",
                     "type": "string",
                     "format": "password"
                 },
                 "password_hash": {
-                    "description": "PasswordHash is the SHA-256 hash of concatenation of ` + "`" + `Password` + "`" + ` and ` + "`" + `PasswordHash` + "`" + `.\nPasswordHash is set by the service and shouldn't be sent on Create or Update requests.",
+                    "description": "PasswordHash is the SHA-256 hash of concatenation of ` + "`" + `Password` + "`" + ` and ` + "`" + `PasswordHash` + "`" + `.\nPasswordHash is set by the service and shouldn't be sent on Create or Update requests.\nPasswordHash will not be returned on bulk GET operations",
                     "type": "string",
                     "example": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
                 },
                 "password_salt": {
-                    "description": "PasswordSalt is the unique random salt for this user.\nPasswordSalt is set by the service and shouldn't be sent on Create or Update requests.",
+                    "description": "PasswordSalt is the unique random salt for this user.\nPasswordSalt is set by the service and shouldn't be sent on Create or Update requests.\nPasswordSalt will not be returned on bulk GET operations",
                     "type": "string",
                     "example": "5f4dcc3b5aa765d61d8327deb882cf99"
                 },

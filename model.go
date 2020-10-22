@@ -21,12 +21,15 @@ type User struct {
 	// Password is the password of the user to be created or updated
 	// This field should be filled only on the create/update requests, and it will come empty on any service responses
 	// Password should be at least 8 characters long
+	// If the Password provided is empty, it will not be updated.
 	Password string `json:"password,omitempty" format:"password"`
 	// PasswordHash is the SHA-256 hash of concatenation of `Password` and `PasswordHash`.
 	// PasswordHash is set by the service and shouldn't be sent on Create or Update requests.
+	// PasswordHash will not be returned on bulk GET operations
 	PasswordHash string `json:"password_hash,omitempty" example:"5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"`
 	// PasswordSalt is the unique random salt for this user.
 	// PasswordSalt is set by the service and shouldn't be sent on Create or Update requests.
+	// PasswordSalt will not be returned on bulk GET operations
 	PasswordSalt string `json:"password_salt,omitempty" example:"5f4dcc3b5aa765d61d8327deb882cf99"`
 	// Country is the country code of the user, in ISO 3166-1 alpha-2 formatted as lowercase two character string.
 	// Country is not validated to exist when a user is created.
